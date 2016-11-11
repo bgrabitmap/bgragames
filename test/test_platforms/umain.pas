@@ -322,8 +322,8 @@ begin
   ty := TileMap.Map.TileHeight;
 
   { Player Position and Size }
-  Player := Rectangle(PlayerPosition.x, PlayerPosition.y, tx, ty);
-  Deep := Rectangle(x * tx, y * ty + ty div 2, tx, ty div 2);
+  Player := DoRectangle(PlayerPosition.x, PlayerPosition.y, tx, ty);
+  Deep := DoRectangle(x * tx, y * ty + ty div 2, tx, ty div 2);
 
   { Layer Data ID }
   y1 := BoundInt(Player.y div ty, 0, TileMap.Map.Height - 1);
@@ -339,7 +339,7 @@ begin
     for x := x1 to x2 do
     begin
       { Wall Position and Size }
-      Wall := Rectangle(x * tx, y * ty, tx, ty);
+      Wall := DoRectangle(x * tx, y * ty, tx, ty);
 
       { If is not empty space }
       case TileMap.Layers[0].Data[n + x] of
@@ -400,8 +400,8 @@ begin
   {$endif}
 
   { Load UOS }
-  if uos_loadlib(PChar(uos1), PChar(uos2), PChar(uos3), PChar(uos4)) = 0 then
-    Sound := True;
+  //if uos_loadlib(PChar(uos1), PChar(uos2), PChar(uos3), PChar(uos4)) = 0 then
+  //  Sound := True;
   {$ENDIF}
 end;
 

@@ -13,7 +13,7 @@ object Form1: TForm1
   OnKeyDown = FormKeyDown
   OnResize = FormResize
   Position = poDesktopCenter
-  LCLVersion = '1.1'
+  LCLVersion = '1.7'
   object BGRAVirtualScreen1: TBGRAVirtualScreen
     Left = 0
     Height = 256
