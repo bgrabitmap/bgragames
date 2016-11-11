@@ -40,7 +40,7 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     FCacheBitmap: TBGRABitmap;
-    FTileMap: TLeveloid;
+    FTileMap: TLeveloidEditor;
     FMouseIsDown: boolean;
     FLastPainted: NativeInt;
     FCursorRect: TRect;
@@ -54,11 +54,11 @@ type
     procedure SetFLastPainted(AValue: NativeInt);
     procedure SetFMouseIsDown(AValue: boolean);
     procedure SetFMustRedraw(AValue: boolean);
-    procedure SetFTileMap(AValue: TLeveloid);
+    procedure SetFTileMap(AValue: TLeveloidEditor);
   public
     procedure PaintTile(Eraser: boolean = False);
   public
-    property TileMap: TLeveloid read FTileMap write SetFTileMap;
+    property TileMap: TLeveloidEditor read FTileMap write SetFTileMap;
     property MouseIsDown: boolean read FMouseIsDown write SetFMouseIsDown default False;
     property LastPainted: NativeInt read FLastPainted write SetFLastPainted default -1;
     property CursorRect: TRect read FCursorRect write SetFCursorRect;
@@ -90,7 +90,7 @@ begin
   if ParamStr(1) <> '' then
   begin
     SetCurrentDir(ExtractFilePath(ParamStr(1)));
-    TileMap := TLeveloid.Create(ParamStr(1));
+    TileMap := TLeveloidEditor.Create(ParamStr(1));
 
     DefaultTileWidth := TileMap.Map.TileWidth;
     DefaultTileHeight := TileMap.Map.TileHeight;
@@ -145,7 +145,7 @@ begin
   end;
 end;
 
-procedure TfrmMain.SetFTileMap(AValue: TLeveloid);
+procedure TfrmMain.SetFTileMap(AValue: TLeveloidEditor);
 begin
   if FTileMap = AValue then
     Exit;

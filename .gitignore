@@ -2,5 +2,5 @@
 *.dbg
 *.exe
 *.lps
-backup/*
+backup
 lib

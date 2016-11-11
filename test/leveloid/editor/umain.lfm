@@ -13,7 +13,7 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Position = poScreenCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.7'
   WindowState = wsMaximized
   object toolsPanel: TPanel
     Left = 555
@@ -33,7 +33,7 @@ object frmMain: TfrmMain
     TabOrder = 0
     object lblPOS: TLabel
       Left = 4
-      Height = 25
+      Height = 20
       Top = 4
       Width = 100
       Caption = 'x: y:'
@@ -41,27 +41,27 @@ object frmMain: TfrmMain
     end
     object lblID: TLabel
       Left = 4
-      Height = 25
-      Top = 33
+      Height = 20
+      Top = 28
       Width = 100
       Caption = 'id:'
       ParentColor = False
     end
     object cbTileID: TComboBox
       Left = 4
-      Height = 33
-      Top = 62
+      Height = 28
+      Top = 52
       Width = 100
-      ItemHeight = 25
+      ItemHeight = 20
       Style = csDropDownList
       TabOrder = 0
     end
     object cbZoom: TComboBox
       Left = 4
-      Height = 33
-      Top = 99
+      Height = 28
+      Top = 84
       Width = 100
-      ItemHeight = 25
+      ItemHeight = 20
       ItemIndex = 3
       Items.Strings = (
         '25%'
@@ -82,8 +82,8 @@ object frmMain: TfrmMain
     end
     object Button1: TButton
       Left = 4
-      Height = 35
-      Top = 136
+      Height = 30
+      Top = 116
       Width = 100
       Caption = 'Color...'
       OnClick = Button1Click
@@ -91,8 +91,8 @@ object frmMain: TfrmMain
     end
     object btnClear: TButton
       Left = 4
-      Height = 35
-      Top = 175
+      Height = 30
+      Top = 150
       Width = 100
       Caption = 'Clear'
       OnClick = btnClearClick
