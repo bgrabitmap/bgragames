@@ -4,6 +4,7 @@ object frmMain: TfrmMain
   Height = 400
   Top = 205
   Width = 720
+  BorderStyle = bsNone
   Caption = 'leveloid'
   ClientHeight = 400
   ClientWidth = 720
@@ -17,7 +18,7 @@ object frmMain: TfrmMain
   OnKeyUp = FormKeyUp
   OnResize = FormResize
   Position = poScreenCenter
-  LCLVersion = '1.4.0.4'
+  LCLVersion = '1.7'
   object bgMap: TOpenGLControl
     Left = 0
     Height = 400

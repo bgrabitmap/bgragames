@@ -142,7 +142,7 @@ begin
   Keys.Values[IntToStr(Key)] := 'False';
 
   if Key = VK_ESCAPE then
-    ToggleFullScreen(Self, FormRect);
+    Self.Close;
 
   if Key = VK_F1 then
     if GameStyle = gsNormal then
@@ -300,22 +300,21 @@ end;
 
 procedure TfrmMain.InitUOS;
 var
-  path0, uos1, uos2, uos3, uos4: string;
+  path0, uos1, uos2: string;
 begin
   Sound := False;
 
   path0 := ExtractFilePath(ParamStr(0));
   uos1 := path0 + '\LibPortaudio-32.dll';
   uos2 := path0 + '\LibSndFile-32.dll';
-  uos3 := path0 + '\LibMpg123-32.dll';
-  uos4 := path0 + '\libSoundTouch-32.dll';
 
-  Sound := uos_loadlib(PChar(uos1), PChar(uos2), PChar(uos3), PChar(uos4)) = 0;
+  Sound := uos_loadlib(PChar(uos1), PChar(uos2), PChar(''), PChar(''), PChar('')) = 0;
 end;
 
 procedure TfrmMain.EndUOS;
 begin
-  uos_unloadlib();
+  uos_unloadlib;
+  uos_free;
 end;
 
 procedure TfrmMain.InitKeys;

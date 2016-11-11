@@ -137,14 +137,12 @@ end;
 procedure ToggleFullScreen(Form: TForm; ARect: TRect);
 begin
   Form.SetBounds(ARect.Left, ARect.Top, ARect.Right, ARect.Bottom);
-  if Form.BorderStyle <> bsNone then
+  if Form.WindowState <> wsMaximized then
   begin
-    Form.BorderStyle := bsNone;
     Form.WindowState := wsMaximized;
   end
   else
   begin
-    Form.BorderStyle := bsSizeable;
     Form.WindowState := wsNormal;
   end;
 end;
