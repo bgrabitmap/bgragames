@@ -103,7 +103,6 @@ type
     p_up, p_down, p_left, p_right, m_up, m_down, m_left, m_right: boolean;
     FramesPerSecond, MsPerFrame: integer;
     procedure SwitchTile(x, y: integer);
-    procedure ToggleFullScreen;
   public
 
   end;
@@ -370,8 +369,6 @@ begin
 
   CenterOffset.x := (Width - (TileWidth * HorizontalTiles)) div 2;
   CenterOffset.y := (Height - (TileHeight * VerticalTiles)) div 2;
-
-  //SetBounds(Left, Top, TileWidth * HorizontalTiles, TileHeight * VerticalTiles);
 end;
 
 procedure TForm1.BGLVirtualScreen1UnloadTextures(Sender: TObject;
@@ -387,7 +384,6 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  ToggleFullScreen;
   HoverPos := Point(0, 0);
   ScaleFactor := 1;
   p_up := False;
@@ -412,7 +408,6 @@ procedure TForm1.FormKeyDown(Sender: TObject; var Key: word; Shift: TShiftState)
 begin
   case key of
     vk_Escape: Self.Close;
-    vk_F11: ToggleFullScreen;
     vk_left, vk_a: p_left := True;
     vk_right, vk_d: p_right := True;
     vk_up, vk_w: p_up := True;
@@ -428,17 +423,12 @@ end;
 
 procedure TForm1.FormKeyUp(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  if (key = vk_left) or (key = vk_a) then
-    p_left := False;
-
-  if (key = vk_right) or (key = vk_d) then
-    p_right := False;
-
-  if (key = vk_up) or (key = vk_w) then
-    p_up := False;
-
-  if (key = vk_down) or (key = vk_s) then
-    p_down := False;
+  case key of
+    vk_left, vk_a: p_left := False;
+    vk_right, vk_d: p_right := False;
+    vk_up, vk_w: p_up := False;
+    vk_down, vk_s: p_down := False;
+  end;
 end;
 
 procedure TForm1.FormMouseWheelDown(Sender: TObject; Shift: TShiftState;
@@ -488,15 +478,9 @@ begin
   x := x - CenterOffset.x - round(CameraOffset.x);
   y := y - CenterOffset.y - round(CameraOffset.y);
 
-  if (x < 0) or (y < 0) or (x > TileWidth * HorizontalTiles) or
-    (y > TileHeight * VerticalTiles) then
-  begin
-    HoverPos := Point(-TileWidth, -TileHeight);
-    exit;
-  end;
+  TileX := x div TileWidth;
+  TileY := y div TileHeight;
 
-  TileX := trunc(x / TileWidth);
-  TileY := trunc(y / TileHeight);
   if (TileX < HorizontalTiles) and (TileY < VerticalTiles) and
     (TileX >= 0) and (TileY >= 0) then
   begin
@@ -507,15 +491,9 @@ begin
     if not MouseIsDown then
       exit;
     TileMap.Data[TileY, TileX] := CurrentTile;
-  end;
-end;
-
-procedure TForm1.ToggleFullScreen;
-begin
-  if WindowState <> wsMaximized then
-    WindowState := wsMaximized
+  end
   else
-    WindowState := wsNormal;
+    HoverPos := Point(-TileWidth, -TileHeight);
 end;
 
 end.

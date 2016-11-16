@@ -16,6 +16,7 @@ object Form1: TForm1
   OnMouseWheelUp = FormMouseWheelUp
   Position = poScreenCenter
   LCLVersion = '1.7'
+  WindowState = wsMaximized
   object BGLVirtualScreen1: TBGLVirtualScreen
     Left = 0
     Height = 720
