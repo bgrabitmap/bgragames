@@ -26,6 +26,11 @@ procedure SetScreenResolution(const Width, Height, colorDepth: integer); overloa
 
 implementation
 
+{$IFNDEF WINDOWS}
+uses
+  LCLType;
+{$ENDIF}
+
 procedure ToggleFullScreen(Form: TForm; ARect: TRect);
 begin
   Form.SetBounds(ARect.Left, ARect.Top, ARect.Right, ARect.Bottom);
