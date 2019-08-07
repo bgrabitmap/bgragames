@@ -49,6 +49,11 @@ procedure SetDisplaySettings(Index: integer; Notify: boolean = False);
 
 implementation
 
+{$IFNDEF WINDOWS}
+uses
+  LCLType;
+{$ENDIF}
+
 procedure RecordToVariant(var ARec; Size: integer; var v: olevariant);
 var
   p: PByteArray;
