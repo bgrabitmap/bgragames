@@ -40,7 +40,7 @@ procedure ScaleAspectRatio(Control: TControl; OriginalParentW, OriginalParentH: 
 procedure ScaleAspectRatio(Control: TControl; DestW, DestH: integer;
   Stretch, Proportional, Center: boolean);
 
-{$IFDEF Windows}
+{$IFDEF MSWINDOWS}
 procedure SetScreenResolution(const Width, Height: integer); overload;
 procedure SetScreenResolution(const Width, Height, colorDepth: integer); overload;
 procedure GetDisplaySettings(s: TStringList);
