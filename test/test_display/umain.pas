@@ -34,13 +34,17 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+{$IFDEF MSWINDOWS}
   GetDisplaySettings(TStringList(ComboBox1.Items));
+{$ENDIF}
   ComboBox1.ItemIndex := ComboBox1.Items.Count - 1;
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
+{$IFDEF MSWINDOWS}
   SetDisplaySettings(ComboBox1.ItemIndex);
+{$ENDIF}
 end;
 
 end.

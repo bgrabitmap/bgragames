@@ -29,12 +29,24 @@ uses
 
   function AddPackage(const Path: string): string;
   begin
-    if RunCommand('lazbuild', ['--add-package-link', Path], Result, [poStderrToOutPut]) then
-      OutLog(etDebug, 'Add package:'#9 + Path)
-    else
+    with TRegExpr.Create do
     begin
-      ExitCode += 1;
-      OutLog(etError, Result);
+      Expression :=
+        {$IFDEF MSWINDOWS}
+          '(cocoa|x11|_template)'
+        {$ELSE}
+          '(cocoa|gdi|_template)'
+        {$ENDIF}
+      ;
+      if not Exec(Path) then
+        if RunCommand('lazbuild', ['--add-package-link', Path], Result, [poStderrToOutPut]) then
+          OutLog(etDebug, 'Add package:'#9 + Path)
+        else
+        begin
+          ExitCode += 1;
+          OutLog(etError, Result);
+        end;
+      Free;
     end;
   end;
 
@@ -66,18 +78,28 @@ uses
   end;
 
   function AddDDL(const Path: String): string;
+  const
+    LibPath: string = '/usr/lib/';
+  var
+    List: array of string;
+    Last: integer;
   begin
     OutLog(etDebug, #9'add:'#9 + Path);
-    if RunCommand('sudo', ['bash', '-c', 'cp %s /usr/lib/; ldconfig --verbose'.Format([Path])], Result, [poStderrToOutPut]) then
-      OutLog(etInfo, #9'success!')
-    else
-    begin
-      ExitCode += 1;
-      OutLog(etError, Result);
-    end;
+    List := Path.Split(DirectorySeparator);
+    Last := High(List);
+    if not FileExists(LibPath + List[Last]) then
+      if RunCommand('sudo', ['bash', '-c', 'cp %s %s; ldconfig --verbose'.Format([Path, LibPath])], Result, [poStderrToOutPut]) then
+        OutLog(etInfo, #9'success!')
+      else
+      begin
+        ExitCode += 1;
+        OutLog(etError, Result);
+      end;
   end;
 
   function BuildProject(const Path: string): string;
+  var
+    Text: string;
   begin
     OutLog(etDebug, 'Build from:'#9 + Path);
     if RunCommand('lazbuild',
@@ -85,9 +107,10 @@ uses
     begin
       Result := SelectString(Result, 'Linking').Split(' ')[2].Replace(LineEnding, EmptyStr);
       OutLog(etInfo, #9'to:'#9 + Result);
-      if ReadFileToString(Path.Replace('.lpi', '.lpr')).Contains('consoletestrunner') then
+      Text := ReadFileToString(Path.Replace('.lpi', '.lpr'));
+      if Text.Contains('program') and Text.Contains('consoletestrunner') then
         RunTest(Result)
-      else if ReadFileToString(Path.Replace('.lpi', '.lpr')).Contains('exports') then
+      else if Text.Contains('library') and Text.Contains('exports') then
         AddDDL(Result)
     end
     else
@@ -151,7 +174,7 @@ uses
     end;
   end;
 
-  function BuildAll(const Target: string; const Dependencies: array of string): string;
+  function BuildAll(const Dependencies: array of string): string;
   var
     List: TStringList;
     DT: TDateTime;
@@ -172,22 +195,22 @@ uses
         List.AddStrings(FindAllFiles(InstallOPM(Result), '*.lpk'));
       for Result in List do
         AddPackage(Result);
-      List := FindAllFiles(Target, '*.lpi');
+      List := FindAllFiles(GetCurrentDir, '*.lpi');
       List.Sort;
       for Result in List do
-        if not Result.Contains('backup') then
+        if not Result.Contains('use' + DirectorySeparator) then
           BuildProject(Result);
     finally
       List.Free;
     end;
     if not RunCommand('delp', ['-r', GetCurrentDir], Result, [poStderrToOutPut]) then
       OutLog(etError, Result);
-    OutLog(etDebug, 'Duration:'#9 + FormatDateTime('hh:nn:ss', DT - Time));
+    OutLog(etDebug, 'Duration:'#9 + FormatDateTime('hh:nn:ss', Time - DT));
   end;
 
 begin
   try
-    BuildAll('test', []);
+    BuildAll(['BGRAControls', 'BGRABitmap']);
     case ExitCode of
       0: OutLog(etInfo, 'Errors:'#9 + ExitCode.ToString);
       else

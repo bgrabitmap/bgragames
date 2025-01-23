@@ -26,7 +26,7 @@ procedure SetScreenResolution(const Width, Height, colorDepth: integer); overloa
 
 implementation
 
-{$IFNDEF WINDOWS}
+{$IFDEF WINDOWS}
 uses
   LCLType;
 {$ENDIF}
